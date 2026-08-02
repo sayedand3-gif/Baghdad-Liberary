@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مساعد الحكمة الذكي — مكتبة بغداد</title>
+  
+  <!-- استدعاء ملف التنسيقات الرئيسي -->
+  <link rel="stylesheet" href="../assets/css/main.css">
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .header-nav {
+      display: flex;
+      gap: 28px;
+      font-size: 0.95rem;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .toggle-track {
+      width: 50px;
+      height: 26px;
+      border-radius: 20px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-gold);
+      position: relative;
+      cursor: pointer;
+    }
+    .toggle-thumb {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gold-primary);
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-dark);
+    }
+    html.light .toggle-thumb {
+      transform: translateX(-24px);
+    }
+
+    /* Chat Layout Container */
+    .chat-layout {
+      max-width: 960px;
+      margin: 30px auto;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface-1);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 18px 24px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-body {
+      padding: 24px;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-height: 420px;
+    }
+
+    /* Message Bubbles */
+    .message {
+      display: flex;
+      gap: 14px;
+      max-width: 80%;
+    }
+    .message.user-message {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+    .message.ai-message {
+      align-self: flex-start;
+    }
+
+    .message-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--surface-2);
+      border: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-title);
+      font-size: 0.9rem;
+      color: var(--gold-soft);
+      flex-shrink: 0;
+    }
+
+    .message-bubble {
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-ui);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .user-message .message-bubble {
+      background: var(--gold-primary);
+      color: var(--text-dark);
+      border-bottom-left-radius: 2px;
+    }
+    .ai-message .message-bubble {
+      background: var(--surface-2);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-bottom-right-radius: 2px;
+    }
+
+    /* Chat Input Bar */
+    .chat-input-container {
+      padding: 16px 24px;
+      background: var(--surface-1);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      gap: 12px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-sm);
+      padding: 12px 18px;
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+    }
+    .chat-input:focus {
+      outline: none;
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header style="border-bottom: 1px solid var(--border-gold); background: var(--surface-1);">
+    <div class="header-container">
+      
+      <a href="../index.html" style="display: flex; align-items: center; gap: 10px;">
+        <span class="star8" style="width: 26px; height: 26px;"></span>
+        <span class="font-title" style="font-size: 1.5rem; font-weight: 700;">مكتبة بغداد</span>
+      </a>
+
+      <nav class="header-nav font-ui">
+        <a href="../index.html" style="color: var(--text-muted);">الرئيسية</a>
+        <a href="../discovery/library.html" style="color: var(--gold-soft);">المكتبة</a>
+        <a href="../discovery/scholars.html" style="color: var(--text-muted);">العلماء</a>
+        <a href="../discovery/inventions.html" style="color: var(--text-muted);">الاختراعات</a>
+        <a href="../user/community.html" style="color: var(--text-muted);">المجتمع</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="toggle-track" id="modeToggle" role="button">
+          <div class="toggle-thumb" id="modeThumb">☾</div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===================== MAIN CHAT CONTENT ===================== -->
+  <main style="max-width: 1180px; margin: 0 auto; padding: 0 24px; width: 100%; flex: 1; display: flex;">
+    
+    <div class="chat-layout illum-frame">
+      
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span class="star8" style="width: 24px; height: 24px;"></span>
+          <div>
+            <h2 class="font-title" style="font-size: 1.2rem; margin-bottom: 2px;">مساعد الحكمة الذكي</h2>
+            <div class="font-ui" style="font-size: 0.8rem; color: var(--gold-soft);">الكتاب المفتوح: مقدمة ابن خلدون</div>
+          </div>
+        </div>
+        <a href="book-details.html" class="btn btn-outline" style="font-size: 0.8rem; padding: 6px 12px;">العودة للكتاب</a>
+      </div>
+
+      <!-- Chat Body -->
+      <div class="chat-body" id="chatBody">
+        
+        <!-- AI Welcome Message -->
+        <div class="message ai-message">
+          <div class="message-avatar">✦</div>
+          <div class="message-bubble">
+            مرحباً بك! أنا مساعد الحكمة الذكي الخاص بمكتبة بغداد. يمكنك سؤالي عن أي مفهوم في "مقدمة ابن خلدون"، أو طلب تلخيص لأي باب من أبواب الكتاب!
+          </div>
+        </div>
+
+        <!-- User Message Example -->
+        <div class="message user-message">
+          <div class="message-avatar">أ</div>
+          <div class="message-bubble">
+            ما هو يقصد ابن خلدون بقانون العصبية في بناء الدولة؟
+          </div>
+        </div>
+
+        <!-- AI Response Example -->
+        <div class="message ai-message">
+          <div class="message-avatar">✦</div>
+          <div class="message-bubble">
+            يقصد ابن خلدون بـ <strong>"العصبية"</strong> الرابطة الاجتماعية والنفسية القوية التي تجمع أبناء القبيلة أو الجماعة، وتدفعهم للتعاضد والدفاع عن بعضهم البعض. ويرى أنها المحرك الأساسي لتأسيس الملك والدول؛ حيث تبدأ الدول بعصبية قوية وتضعف تدريجياً مع الانغماس في الترف والتحضر.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Chat Input Form -->
+      <form class="chat-input-container" id="chatForm">
+        <input type="text" class="chat-input" id="userInput" placeholder="اسأل المساعد الذكي عن الكتاب..." required>
+        <button type="submit" class="btn btn-gold" style="padding: 10px 20px;">إرسال ↵</button>
+      </form>
+
+    </div>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="background: var(--surface-1); border-top: 1px solid var(--border-gold); padding: 24px; margin-top: 30px;">
+    <div style="max-width: 1180px; margin: 0 auto; text-align: center;" class="font-ui">
+      <span style="color: var(--text-muted); font-size: 0.85rem;">
+        © 2026 مكتبة بغداد — بيت الحكمة الرقمي. جميع الحقوق محفوظة.
+      </span>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Simple interactive chat response simulation
+    const chatForm = document.getElementById('chatForm');
+    const userInput = document.getElementById('userInput');
+    const chatBody = document.getElementById('chatBody');
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      // Render User Message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'message user-message';
+      userDiv.innerHTML = `
+        <div class="message-avatar">أ</div>
+        <div class="message-bubble">${text}</div>
+      `;
+      chatBody.appendChild(userDiv);
+
+      userInput.value = '';
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      // Simulate AI response after 1 second
+      setTimeout(() => {
+        const aiDiv = document.createElement('div');
+        aiDiv.className = 'message ai-message';
+        aiDiv.innerHTML = `
+          <div class="message-avatar">✦</div>
+          <div class="message-bubble">سؤال ممتاز! هذا الموضوع ناقشه ابن خلدون بالتفصيل في مقدمته ضمن أبواب العمران والاجتماع البشري.</div>
+        `;
+        chatBody.appendChild(aiDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 800);
+    });
+  </script>
+</body>
+</html>
