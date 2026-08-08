@@ -1,3 +1,26 @@
+<?php
+require_once '../config/db.php';
+
+// الحصول على id العالم من الرابط
+$scholar_id = isset($_GET['id']) ? (int)$_GET['id'] : 1;
+
+// جلب بيانات العالم من قاعدة البيانات
+$stmt = $pdo->prepare("SELECT * FROM scholars WHERE id = ?");
+$stmt->execute([$scholar_id]);
+$scholar = $stmt->fetch();
+
+// في حالة عدم وجود العالم، التوجيه لصفحة العلماء
+if (!$scholar) {
+    header('Location: scholars.php');
+    exit;
+}
+?>
+<!-- ======================================================== -->
+<!-- ======================================================== -->
+<!-- ======================================================== -->
+
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -170,13 +193,21 @@
     
     <!-- Scholar Profile -->
     <div class="scholar-header illum-frame">
-      <div class="scholar-avatar-lg">خ</div>
+     <div class="scholar-avatar" style="overflow: hidden; padding: 0; width: 120px; height: 120px; border-radius: 50%;">
+  <?php if (!empty($scholar['image_url'])): ?>
+    <img src="<?= htmlspecialchars($scholar['image_url']) ?>" alt="<?= htmlspecialchars($scholar['name']) ?>" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+  <?php else: ?>
+    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--gold-soft);">
+      <?= mb_substr($scholar['name'], 0, 1, 'UTF-8') ?>
+    </div>
+  <?php endif; ?>
+</div>
       <div>
-        <h1 style="font-size: 2.2rem; margin-bottom: 8px;">عبد الرحمن ابن خلدون</h1>
-        <div class="font-ui" style="color: var(--gold-soft); font-size: 1rem; margin-bottom: 16px;">مؤسس علم الاجتماع الحديث وأعظم مؤرخي العصور الوسطى</div>
-        <p class="font-ui" style="color: var(--text-muted); line-height: 1.7; font-size: 0.95rem;">
-          مؤرخ، وعالم اجتماع، وفيلسوف عربي مسلم، وُلِد في تونس وتوفي في القاهرة. يُعد من أهم وأبرز العلماء في التاريخ الإسلامي، وهو مؤسس علم العمران البشري (علم الاجتماع) وواضع الأسس الحديثة لعلم التاريخ والسياسة والاقتصاد.
-        </p>
+        <h1 class="font-title"><?= htmlspecialchars($scholar['name']) ?></h1>        
+<p class="font-ui" style="line-height: 1.8; color: var(--text-muted);">
+  <?= htmlspecialchars($scholar['bio']) ?>
+</p>
+        <p class="font-ui" style="color: var(--gold-soft);"><?= htmlspecialchars($scholar['specialty']) ?> | <?= htmlspecialchars($scholar['era']) ?></p>
       </div>
     </div>
 

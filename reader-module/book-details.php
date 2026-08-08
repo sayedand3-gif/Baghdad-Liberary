@@ -1,11 +1,25 @@
+<?php
+require_once '../config/db.php';
+
+$book_id = isset($_GET['id']) ? (int)$_GET['id'] : 1;
+
+$stmt = $pdo->prepare("SELECT * FROM books WHERE id = ?");
+$stmt->execute([$book_id]);
+$book = $stmt->fetch();
+
+if (!$book) {
+    header('Location: ../discovery/library.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مقدمة ابن خلدون — مكتبة بغداد</title>
+  <title><?= htmlspecialchars($book['title']) ?> — مكتبة بغداد</title>
   
-  <!-- استدعاء ملف التنسيقات الرئيسي -->
   <link rel="stylesheet" href="../assets/css/main.css">
 
   <style>
@@ -57,7 +71,6 @@
       transform: translateX(-24px);
     }
 
-    /* Book Details Layout */
     .book-hero {
       display: grid;
       grid-template-columns: 280px 1fr;
@@ -86,6 +99,8 @@
       justify-content: flex-end;
       padding: 24px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      background-size: cover;
+      background-position: center;
     }
 
     .book-meta-grid {
@@ -114,7 +129,6 @@
 </head>
 <body>
 
-  <!-- ===================== HEADER ===================== -->
   <header style="border-bottom: 1px solid var(--border-gold); background: var(--surface-1);">
     <div class="header-container">
       
@@ -125,9 +139,9 @@
 
       <nav class="header-nav font-ui">
         <a href="../index.html" style="color: var(--text-muted);">الرئيسية</a>
-        <a href="../discovery/library.html" style="color: var(--gold-soft);">المكتبة</a>
-        <a href="../discovery/scholars.html" style="color: var(--text-muted);">العلماء</a>
-        <a href="../discovery/inventions.html" style="color: var(--text-muted);">الاختراعات</a>
+        <a href="../discovery/library.php" style="color: var(--gold-soft);">المكتبة</a>
+        <a href="../discovery/scholars.php" style="color: var(--text-muted);">العلماء</a>
+        <a href="../discovery/inventions.php" style="color: var(--text-muted);">الاختراعات</a>
         <a href="../user/community.html" style="color: var(--text-muted);">المجتمع</a>
       </nav>
 
@@ -141,69 +155,62 @@
     </div>
   </header>
 
-  <!-- ===================== MAIN CONTENT ===================== -->
   <main style="max-width: 1180px; margin: 0 auto; padding: 40px 24px;">
     
-    <!-- Hero Book Details Card -->
     <div class="book-hero illum-frame">
       
-      <!-- Book Cover -->
-      <div class="book-cover-lg">
+      <div class="book-cover-lg" style="<?= !empty($book['cover_image']) ? "background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('" . htmlspecialchars($book['cover_image']) . "');" : "" ?>">
         <span class="star8" style="width: 32px; height: 32px; margin-bottom: 12px;"></span>
-        <h1 class="font-title" style="font-size: 1.8rem; color: #fff; margin-bottom: 8px;">مقدمة ابن خلدون</h1>
-        <p class="font-ui" style="color: var(--gold-soft); font-size: 0.9rem;">ديوان المبتدأ والخبر</p>
+        <h1 class="font-title"><?= htmlspecialchars($book['title']) ?></h1>
+        <p class="font-ui" style="color: var(--gold-soft);"><?= htmlspecialchars($book['author_name'] ?? '') ?> | <?= htmlspecialchars($book['category'] ?? '') ?></p>
       </div>
 
-      <!-- Book Main Information -->
       <div style="display: flex; flex-direction: column; justify-content: space-between;">
         <div>
           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
             <div>
-              <h2 style="font-size: 2rem; margin-bottom: 6px;">مقدمة ابن خلدون</h2>
-              <a href="../discovery/scholar-details.html" class="font-ui" style="color: var(--gold-soft); font-size: 1.1rem; text-decoration: underline;">
-                تأليف: عبد الرحمن بن محمد ابن خلدون
-              </a>
+              <h2 style="font-size: 2rem; margin-bottom: 6px;"><?= htmlspecialchars($book['title']) ?></h2>
+              <span class="font-ui" style="color: var(--gold-soft); font-size: 1.1rem;">
+                تأليف: <?= htmlspecialchars($book['author_name'] ?? 'غير محدد') ?>
+              </span>
             </div>
             <span class="font-ui" style="background: var(--surface-2); border: 1px solid var(--border-gold); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--gold-soft);">
-              ★ 4.9 (1,240 تقييم)
+              ★ <?= htmlspecialchars($book['rating'] ?? '4.8') ?>
             </span>
           </div>
 
-          <!-- Metadata List -->
           <div class="book-meta-grid">
             <div>
               <div class="meta-item-label">التصنيف</div>
-              <div class="meta-item-value">التاريخ والاجتماع</div>
+              <div class="meta-item-value"><?= htmlspecialchars($book['category'] ?? 'عام') ?></div>
             </div>
             <div>
               <div class="meta-item-label">عدد الصفحات</div>
-              <div class="meta-item-value">٦٤٠ صفحة</div>
+              <div class="meta-item-value"><?= htmlspecialchars($book['pages'] ?? $book['pages_count'] ?? 'غير محدد') ?> صفحة</div>
             </div>
             <div>
               <div class="meta-item-label">سنة التأليف</div>
-              <div class="meta-item-value">١٣٧٧ م</div>
+              <div class="meta-item-value"><?= htmlspecialchars($book['publish_year'] ?? $book['year'] ?? 'غير محدد') ?></div>
             </div>
             <div>
               <div class="meta-item-label">اللغة</div>
-              <div class="meta-item-value">العربية (الأصلية)</div>
+              <div class="meta-item-value"><?= htmlspecialchars($book['language'] ?? 'العربية') ?></div>
             </div>
           </div>
 
-          <!-- Overview -->
           <p class="font-ui" style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 24px;">
-            مقدمة ابن خلدون موسوعة علمية شاملة تعتبر الحجر الأساس لعلم الاجتماع الحديث والفلسفة التاريخية. يناقش فيها الكاتب قوانين قيام الدول وسقوطها، وطبيعة العمران البشري، وتأثير البيئة والجغرافيا على طبائع الشعوب والمجتمعات.
+            <?= htmlspecialchars($book['description'] ?? 'لا يوجد وصف متاح لهذا الكتاب حالياً.') ?>
           </p>
         </div>
 
-        <!-- Primary Action Buttons -->
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-          <a href="interactive-reader.html" class="btn btn-gold" style="padding: 12px 28px; font-size: 1rem;">
+          <a href="interactive-reader.html?id=<?= $book['id'] ?>" class="btn btn-gold" style="padding: 12px 28px; font-size: 1rem;">
             📖 ابدأ القراءة الآن
           </a>
-          <a href="audiobook-player.html" class="btn btn-outline" style="padding: 12px 24px; font-size: 1rem;">
+          <a href="audiobook-player.html?id=<?= $book['id'] ?>" class="btn btn-outline" style="padding: 12px 24px; font-size: 1rem;">
             🎧 استمع للكتاب الصوتي
           </a>
-          <a href="ai-copilot.html" class="btn btn-outline" style="padding: 12px 20px; border-color: var(--border-gold); color: var(--gold-soft);">
+          <a href="ai-copilot.html?id=<?= $book['id'] ?>" class="btn btn-outline" style="padding: 12px 20px; border-color: var(--border-gold); color: var(--gold-soft);">
             ✨ المساعد الذكي
           </a>
         </div>
@@ -212,34 +219,8 @@
 
     </div>
 
-    <!-- Related Books Section -->
-    <section style="margin-top: 50px;">
-      <h3 class="font-title" style="font-size: 1.5rem; margin-bottom: 20px; border-bottom: 1px solid var(--border-gold); padding-bottom: 10px;">
-        كتب ذات صلة
-      </h3>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 20px;">
-        
-        <a href="book-details.html" style="background: var(--surface-1); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; text-decoration: none;">
-          <div style="height: 180px; background: linear-gradient(135deg, #2b2418, #5b4a26); border-radius: 4px; margin-bottom: 12px; display: flex; align-items: flex-end; padding: 12px;">
-            <span class="font-title" style="color: #fff; font-size: 1rem;">كتاب العبر</span>
-          </div>
-          <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">ابن خلدون</div>
-        </a>
-
-        <a href="book-details.html" style="background: var(--surface-1); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; text-decoration: none;">
-          <div style="height: 180px; background: linear-gradient(135deg, #1c2a2b, #274b46); border-radius: 4px; margin-bottom: 12px; display: flex; align-items: flex-end; padding: 12px;">
-            <span class="font-title" style="color: #fff; font-size: 1rem;">فكر ابن خلدون</span>
-          </div>
-          <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">د. علي الوردي</div>
-        </a>
-
-      </div>
-    </section>
-
   </main>
 
-  <!-- ===================== FOOTER ===================== -->
   <footer style="background: var(--surface-1); border-top: 1px solid var(--border-gold); padding: 40px 24px 20px; margin-top: 60px;">
     <div style="max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
       <div style="display: flex; align-items: center; gap: 10px;">

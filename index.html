@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>مكتبة بغداد — بيت الحكمة الرقمي</title>
   
-  <!-- استدعاء نظام التنسيقات الرئيسي -->
   <link rel="stylesheet" href="assets/css/main.css">
   
   <style>
@@ -13,10 +12,10 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        cursor: pointer;
+        /* cursor: pointer; */
+        user-select: none;
     }
 
-    /* تنسيقات خاصة بهيكل الصفحة الرئيسية وتجاوب الهيدر */
     .header-container {
       max-width: 1180px;
       margin: 0 auto;
@@ -56,7 +55,6 @@
       margin: 0 auto;
     }
 
-    /* Toggle Switch Component */
     .toggle-track {
       width: 50px;
       height: 26px;
@@ -109,7 +107,6 @@
 
       <!-- User Actions -->
       <div class="header-actions">
-        <!-- Theme Toggle Switch -->
         <div class="toggle-track" id="modeToggle" role="button" aria-label="تبديل الوضع الليلي والنهاري">
           <div class="toggle-thumb" id="modeThumb">☾</div>
         </div>
@@ -125,7 +122,6 @@
   <section style="padding: 70px 24px;">
     <div class="hero-grid">
       
-      <!-- Text Content -->
       <div>
         <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 700; margin-bottom: 8px;">
           بيت الحكمة الرقمي — من بغداد إلى العالم
@@ -143,7 +139,6 @@
         </div>
       </div>
 
-      <!-- Prayer Times Widget Card -->
       <div class="illum-frame" style="background: var(--surface-1); border: 1px solid var(--border-gold); border-radius: var(--radius-md); padding: 28px; box-shadow: var(--shadow-main);">
         <div class="font-ui" style="font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between;">
           <span>مواقيت الصلاة</span>
@@ -329,3 +324,8 @@
   <script src="assets/js/main.js"></script>
 </body>
 </html>
+
+
+<!-- =================================API==================== -->
+<!-- https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5 -->
+<!-- ======================================================== -->

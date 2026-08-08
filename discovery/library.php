@@ -1,3 +1,14 @@
+<?php
+require_once '../config/db.php';
+
+$stmt = $pdo->query("SELECT * FROM books ORDER BY id ASC");
+$books = $stmt->fetchAll();
+?>
+<!-- ================================================= -->
+<!-- ================================================= -->
+<!-- ================================================= -->
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -158,76 +169,19 @@
       <button class="filter-btn">الكتب الصوتية</button>
     </div>
 
-    <!-- Books Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px;">
-      
-      <!-- Book 1 -->
-      <a href="../reader-module/book-details.html" class="book-card">
-        <div style="height: 260px; background: linear-gradient(135deg, #1e2740, #2c625d); display: flex; align-items: flex-end; padding: 18px;">
-          <span class="font-title" style="font-size: 1.3rem; color: #fff;">مقدمة ابن خلدون</span>
-        </div>
-        <div style="padding: 16px;">
-          <div style="font-weight: 700; font-size: 0.95rem;">عبد الرحمن ابن خلدون</div>
-          <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-top: 8px;">★ 4.9 (تاريخ وفكر)</div>
-        </div>
-      </a>
-
-      <!-- Book 2 -->
-      <a href="../reader-module/book-details.html" class="book-card">
-        <div style="height: 260px; background: linear-gradient(135deg, #2b2418, #5b4a26); display: flex; align-items: flex-end; padding: 18px;">
-          <span class="font-title" style="font-size: 1.3rem; color: #fff;">تاريخ الفلسفة</span>
-        </div>
-        <div style="padding: 16px;">
-          <div style="font-weight: 700; font-size: 0.95rem;">ماجد فخري</div>
-          <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-top: 8px;">★ 4.8 (فلسفة)</div>
-        </div>
-      </a>
-
-      <!-- Book 3 -->
-      <a href="../reader-module/book-details.html" class="book-card">
-        <div style="height: 260px; background: linear-gradient(135deg, #1c2a2b, #274b46); display: flex; align-items: flex-end; padding: 18px;">
-          <span class="font-title" style="font-size: 1.3rem; color: #fff;">القانون في الطب</span>
-        </div>
-        <div style="padding: 16px;">
-          <div style="font-weight: 700; font-size: 0.95rem;">ابن سينا</div>
-          <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-top: 8px;">★ 5.0 (طب وعلوم)</div>
-        </div>
-      </a>
-
-      <!-- Book 4 -->
-      <a href="../reader-module/book-details.html" class="book-card">
-        <div style="height: 260px; background: linear-gradient(135deg, #241826, #4a2b4f); display: flex; align-items: flex-end; padding: 18px;">
-          <span class="font-title" style="font-size: 1.3rem; color: #fff;">كتاب المناظر</span>
-        </div>
-        <div style="padding: 16px;">
-          <div style="font-weight: 700; font-size: 0.95rem;">الحسن ابن الهيثم</div>
-          <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-top: 8px;">★ 4.9 (فيزياء وبصريات)</div>
-        </div>
-      </a>
-
-      <!-- Book 5 -->
-      <a href="../reader-module/book-details.html" class="book-card">
-        <div style="height: 260px; background: linear-gradient(135deg, #382418, #693e25); display: flex; align-items: flex-end; padding: 18px;">
-          <span class="font-title" style="font-size: 1.3rem; color: #fff;">حي بن يقظان</span>
-        </div>
-        <div style="padding: 16px;">
-          <div style="font-weight: 700; font-size: 0.95rem;">ابن طفيل</div>
-          <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-top: 8px;">★ 4.7 (رواية فلسفية)</div>
-        </div>
-      </a>
-
-      <!-- Book 6 -->
-      <a href="../reader-module/book-details.html" class="book-card">
-        <div style="height: 260px; background: linear-gradient(135deg, #182838, #254869); display: flex; align-items: flex-end; padding: 18px;">
-          <span class="font-title" style="font-size: 1.3rem; color: #fff;">تهافت الفلاسفة</span>
-        </div>
-        <div style="padding: 16px;">
-          <div style="font-weight: 700; font-size: 0.95rem;">أبو حامد الغزالي</div>
-          <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-top: 8px;">★ 4.8 (فلسفة ومنطق)</div>
-        </div>
-      </a>
-
-    </div>
+   <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px;">
+  <?php foreach ($books as $book): ?>
+    <a href="../reader-module/book-details.php?id=<?= $book['id'] ?>" class="book-card">
+      <div style="height: 260px; background: linear-gradient(135deg, #1e2740, #2c625d); display: flex; align-items: flex-end; padding: 18px; background-size: cover; background-position: center; <?= !empty($book['cover_image']) ? "background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('" . htmlspecialchars($book['cover_image']) . "');" : "" ?>">
+        <span class="font-title" style="font-size: 1.3rem; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);"><?= htmlspecialchars($book['title']) ?></span>
+      </div>
+      <div style="padding: 16px;">
+        <div style="font-weight: 700; font-size: 0.95rem;"><?= htmlspecialchars($book['author_name'] ?? '') ?></div>
+        <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-top: 8px;">★ 4.9 (<?= htmlspecialchars($book['category'] ?? '') ?>)</div>
+      </div>
+    </a>
+  <?php endforeach; ?>
+</div>
 
   </main>
 

@@ -1,3 +1,15 @@
+<?php
+
+require_once '../config/db.php';
+
+$stmt = $pdo->query("SELECT * FROM scholars ORDER BY id ASC");
+$scholars = $stmt->fetchAll();
+?>
+<!-- ======================================== -->
+<!-- ======================================== -->
+<!-- ======================================== -->
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -136,74 +148,33 @@
       </p>
     </div>
 
-    <!-- Scholars Grid -->
-    <div class="scholars-grid">
-      
-      <!-- Scholar 1 -->
-      <a href="scholar-details.html" class="scholar-card illum-frame">
-        <div>
-          <div class="scholar-avatar">خ</div>
-          <h2 style="font-size: 1.4rem; margin-bottom: 4px;">ابن خلدون</h2>
-          <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-bottom: 12px;">مؤسس علم الاجتماع والتاريخ</div>
-          <p class="font-ui" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
-            مؤرخ وفيلسوف عربي، صاحب "المقدمة" الشهيرة التي وضع فيها القواعد الأولى لعمران البشر والمجتمعات.
-          </p>
-        </div>
-        <div class="font-ui" style="margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 12px; display: flex; justify-content: space-between;">
-          <span>العصر: الذهبي الإسلامي</span>
-          <span style="color: var(--gold-soft); font-weight: 700;">١٢ مؤلفًا ←</span>
-        </div>
-      </a>
+   <!-- Scholars Grid (Dynamic with Images) -->
+<div class="scholars-grid">
+  <?php foreach ($scholars as $scholar): ?>
+    <a href="scholar-details.php?id=<?= $scholar['id'] ?>" class="scholar-card illum-frame">
+      <div>
+        
+        <div class="scholar-avatar" style="overflow: hidden; padding: 0; width: 60px; height: 60px; border-radius: 50%;">
+  <?php if (!empty($scholar['image_url'])): ?>
+    <img src="<?= htmlspecialchars($scholar['image_url']) ?>" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+  <?php else: ?>
+    <?= mb_substr($scholar['name'], 0, 1, 'UTF-8') ?>
+  <?php endif; ?>
+</div>
 
-      <!-- Scholar 2 -->
-      <a href="scholar-details.html" class="scholar-card illum-frame">
-        <div>
-          <div class="scholar-avatar">س</div>
-          <h2 style="font-size: 1.4rem; margin-bottom: 4px;">ابن سينا</h2>
-          <p class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-bottom: 12px;">أمير الأطباء والفيلسوف</p>
-          <p class="font-ui" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
-            طبيب وفيلسوف شامل، عُرف بـ "القانون في الطب" و"كتاب الشفاء"، وظلت مؤلفاته مرجعاً في أوروبا لقرون.
-          </p>
-        </div>
-        <div class="font-ui" style="margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 12px; display: flex; justify-content: space-between;">
-          <span>العصر: الذهبي الإسلامي</span>
-          <span style="color: var(--gold-soft); font-weight: 700;">٢٤ مؤلفًا ←</span>
-        </div>
-      </a>
-
-      <!-- Scholar 3 -->
-      <a href="scholar-details.html" class="scholar-card illum-frame">
-        <div>
-          <div class="scholar-avatar">هـ</div>
-          <h2 style="font-size: 1.4rem; margin-bottom: 4px;">الحسن ابن الهيثم</h2>
-          <p class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-bottom: 12px;">مؤسس علم البصريات الحديث</p>
-          <p class="font-ui" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
-            عالِم موسوعي وضع أسس المنهج العلمي التجريبي، وصاحب النظريات الأولى في الرؤية والتكبير وتأسيس الكاميرا.
-          </p>
-        </div>
-        <div class="font-ui" style="margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 12px; display: flex; justify-content: space-between;">
-          <span>العصر: الذهبي الإسلامي</span>
-          <span style="color: var(--gold-soft); font-weight: 700;">١٦ مؤلفًا ←</span>
-        </div>
-      </a>
-
-      <!-- Scholar 4 -->
-      <a href="scholar-details.html" class="scholar-card illum-frame">
-        <div>
-          <div class="scholar-avatar">غ</div>
-          <h2 style="font-size: 1.4rem; margin-bottom: 4px;">أبو حامد الغزالي</h2>
-          <p class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-bottom: 12px;">حجة الإسلام وفيلسوف الأخلاق</p>
-          <p class="font-ui" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
-            مفكر وفيلسوف إسلامي بارز، ناقش قضايا العقل والميتافيزيقا والتصوف في مؤلفاته الخالدة كـ "إحياء علوم الدين".
-          </p>
-        </div>
-        <div class="font-ui" style="margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 12px; display: flex; justify-content: space-between;">
-          <span>العصر: الذهبي الإسلامي</span>
-          <span style="color: var(--gold-soft); font-weight: 700;">١٨ مؤلفًا ←</span>
-        </div>
-      </a>
-
-    </div>
+        <h2 style="font-size: 1.4rem; margin-bottom: 4px; margin-top: 12px;"><?= htmlspecialchars($scholar['name']) ?></h2>
+        <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-bottom: 12px;"><?= htmlspecialchars($scholar['specialty']) ?></div>
+        <p class="font-ui" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+          <?= htmlspecialchars($scholar['bio']) ?>
+        </p>
+      </div>
+      <div class="font-ui" style="margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 12px; display: flex; justify-content: space-between;">
+        <span>العصر: <?= htmlspecialchars($scholar['era']) ?></span>
+        <span style="color: var(--gold-soft); font-weight: 700;">عرض التفاصيل ←</span>
+      </div>
+    </a>
+  <?php endforeach; ?>
+</div>
 
   </main>
 

@@ -1,3 +1,14 @@
+<?php
+require_once '../config/db.php';
+
+$stmt = $pdo->query("SELECT * FROM inventions ORDER BY id ASC");
+$inventions = $stmt->fetchAll();
+?>
+<!-- ================================================== -->
+<!-- ================================================== -->
+<!-- ================================================== -->
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -144,70 +155,20 @@
       </p>
     </div>
 
-    <!-- Inventions Grid -->
-    <div class="inventions-grid">
-      
-      <!-- Invention 1 -->
-      <div class="invention-card illum-frame">
-        <div class="invention-media">
-          <span class="invention-badge">علم الفلك والملاحة</span>
-          <span class="star8" style="width: 48px; height: 48px; opacity: 0.7;"></span>
-        </div>
-        <div style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; flex: 1;">
-          <div>
-            <h2 style="font-size: 1.3rem; margin-bottom: 6px;">الأسطرلاب التسطيحي</h2>
-            <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-bottom: 12px;">المخترع: مريم الأسطرلابي ومريم العجلي</div>
-            <p class="font-ui" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
-              حاسوب ميكانيكي قديم لتعيين المواقع الفلكية وحساب حركة النجوم وتحديد الاتجاهات وأوقات الصلاة بدقة فائقة.
-            </p>
-          </div>
-          <div class="font-ui" style="margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 12px;">
-            القرن العاشر الميلادي (القرن الرابع الهجري)
-          </div>
-        </div>
+  <div class="inventions-grid">
+  <?php foreach ($inventions as $invention): ?>
+    <div class="invention-card illum-frame">
+      <div class="invention-image">
+        <?php if (!empty($invention['image_url'])): ?>
+          <img src="<?= htmlspecialchars($invention['image_url']) ?>" alt="<?= htmlspecialchars($invention['title']) ?>">
+        <?php endif; ?>
       </div>
-
-      <!-- Invention 2 -->
-      <div class="invention-card illum-frame">
-        <div class="invention-media">
-          <span class="invention-badge">الهندسة الميكانيكية</span>
-          <span class="star8" style="width: 48px; height: 48px; opacity: 0.7;"></span>
-        </div>
-        <div style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; flex: 1;">
-          <div>
-            <h2 style="font-size: 1.3rem; margin-bottom: 6px;">ساعة الفيل المائية</h2>
-            <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-bottom: 12px;">المخترع: بديع الزمان الجزري</div>
-            <p class="font-ui" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
-              تحفة هندسية تعتمد على ضغط الماء والميكانيكا الذاتية لنطق الوقت، وجمعت رموز الحضارات القديمة في تصميم واحد.
-            </p>
-          </div>
-          <div class="font-ui" style="margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 12px;">
-            عام ١٢٠٦ م (القرن السابع الهجري)
-          </div>
-        </div>
-      </div>
-
-      <!-- Invention 3 -->
-      <div class="invention-card illum-frame">
-        <div class="invention-media">
-          <span class="invention-badge">علم البصريات والفيزياء</span>
-          <span class="star8" style="width: 48px; height: 48px; opacity: 0.7;"></span>
-        </div>
-        <div style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; flex: 1;">
-          <div>
-            <h2 style="font-size: 1.3rem; margin-bottom: 6px;">القمطرة (الكاميرا المظلمة)</h2>
-            <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-bottom: 12px;">المخترع: الحسن ابن الهيثم</div>
-            <p class="font-ui" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
-              أول جهاز لتجسيد انتقال الضوء في خطوط مستقيمة، وحجر الأساس الذي بُنيت عليه أجهزة التصوير الحديثة.
-            </p>
-          </div>
-          <div class="font-ui" style="margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 12px;">
-            عام ١٠٢١ م (القرن الخامس الهجري)
-          </div>
-        </div>
-      </div>
-
+      <h3><?= htmlspecialchars($invention['title']) ?></h3>
+      <p><?= htmlspecialchars($invention['description']) ?></p>
+      <span class="inventor">المخترع: <?= htmlspecialchars($invention['inventor']) ?></span>
     </div>
+  <?php endforeach; ?>
+</div>
 
   </main>
 
