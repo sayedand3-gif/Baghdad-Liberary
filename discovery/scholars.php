@@ -114,25 +114,25 @@ $scholars = $stmt->fetchAll();
   <header style="border-bottom: 1px solid var(--border-gold); background: var(--surface-1);">
     <div class="header-container">
       
-      <a href="../index.html" style="display: flex; align-items: center; gap: 10px;">
+      <a href="../index.php" style="display: flex; align-items: center; gap: 10px;">
         <span class="star8" style="width: 26px; height: 26px;"></span>
         <span class="font-title" style="font-size: 1.5rem; font-weight: 700;">مكتبة بغداد</span>
       </a>
 
       <nav class="header-nav font-ui">
-        <a href="../index.html" style="color: var(--text-muted);">الرئيسية</a>
-        <a href="library.html" style="color: var(--text-muted);">المكتبة</a>
-        <a href="scholars.html" style="color: var(--gold-soft);">العلماء</a>
-        <a href="inventions.html" style="color: var(--text-muted);">الاختراعات</a>
-        <a href="../user/community.html" style="color: var(--text-muted);">المجتمع</a>
+        <a href="../index.php" style="color: var(--text-muted);">الرئيسية</a>
+        <a href="library.php" style="color: var(--text-muted);">المكتبة</a>
+        <a href="scholars.php" style="color: var(--gold-soft);">العلماء</a>
+        <a href="inventions.php" style="color: var(--text-muted);">الاختراعات</a>
+        <a href="../user/community.php" style="color: var(--text-muted);">المجتمع</a>
       </nav>
 
       <div class="header-actions">
         <div class="toggle-track" id="modeToggle" role="button">
           <div class="toggle-thumb" id="modeThumb">☾</div>
         </div>
-        <a href="../auth/login.html" class="btn btn-outline">تسجيل الدخول</a>
-        <a href="../auth/register.html" class="btn btn-gold">ابدأ الآن</a>
+        <a href="../auth/login.php" class="btn btn-outline">تسجيل الدخول</a>
+        <a href="../auth/register.php" class="btn btn-gold">ابدأ الآن</a>
       </div>
 
     </div>
@@ -186,9 +186,9 @@ $scholars = $stmt->fetchAll();
         <span class="font-title" style="font-size: 1.2rem; font-weight: 700;">مكتبة بغداد</span>
       </div>
       <div class="font-ui" style="display: flex; gap: 20px; font-size: 0.85rem; color: var(--text-muted);">
-        <a href="../system/about-faq.html">عن المكتبة</a>
-        <a href="../system/about-faq.html">الأسئلة الشائعة</a>
-        <a href="../system/about-faq.html">اتصل بنا</a>
+        <a href="../system/about-faq.php">عن المكتبة</a>
+        <a href="../system/about-faq.php">الأسئلة الشائعة</a>
+        <a href="../system/about-faq.php">اتصل بنا</a>
       </div>
       <div class="font-ui" style="color: var(--text-muted); font-size: 0.85rem;">
         © 2026 مكتبة بغداد — بيت الحكمة الرقمي. جميع الحقوق محفوظة.

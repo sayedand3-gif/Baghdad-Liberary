@@ -132,24 +132,24 @@ if (!$book) {
   <header style="border-bottom: 1px solid var(--border-gold); background: var(--surface-1);">
     <div class="header-container">
       
-      <a href="../index.html" style="display: flex; align-items: center; gap: 10px;">
+      <a href="../index.php" style="display: flex; align-items: center; gap: 10px;">
         <span class="star8" style="width: 26px; height: 26px;"></span>
         <span class="font-title" style="font-size: 1.5rem; font-weight: 700;">مكتبة بغداد</span>
       </a>
 
       <nav class="header-nav font-ui">
-        <a href="../index.html" style="color: var(--text-muted);">الرئيسية</a>
+        <a href="../index.php" style="color: var(--text-muted);">الرئيسية</a>
         <a href="../discovery/library.php" style="color: var(--gold-soft);">المكتبة</a>
         <a href="../discovery/scholars.php" style="color: var(--text-muted);">العلماء</a>
         <a href="../discovery/inventions.php" style="color: var(--text-muted);">الاختراعات</a>
-        <a href="../user/community.html" style="color: var(--text-muted);">المجتمع</a>
+        <a href="../user/community.php" style="color: var(--text-muted);">المجتمع</a>
       </nav>
 
       <div class="header-actions">
         <div class="toggle-track" id="modeToggle" role="button">
           <div class="toggle-thumb" id="modeThumb">☾</div>
         </div>
-        <a href="../user/profile.html" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem;">حسابي</a>
+        <a href="../user/profile.php" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem;">حسابي</a>
       </div>
 
     </div>
@@ -204,13 +204,13 @@ if (!$book) {
         </div>
 
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-          <a href="interactive-reader.html?id=<?= $book['id'] ?>" class="btn btn-gold" style="padding: 12px 28px; font-size: 1rem;">
+          <a href="interactive-reader.php?id=<?= $book['id'] ?>" class="btn btn-gold" style="padding: 12px 28px; font-size: 1rem;">
             📖 ابدأ القراءة الآن
           </a>
-          <a href="audiobook-player.html?id=<?= $book['id'] ?>" class="btn btn-outline" style="padding: 12px 24px; font-size: 1rem;">
+          <a href="audiobook-player.php?id=<?= $book['id'] ?>" class="btn btn-outline" style="padding: 12px 24px; font-size: 1rem;">
             🎧 استمع للكتاب الصوتي
           </a>
-          <a href="ai-copilot.html?id=<?= $book['id'] ?>" class="btn btn-outline" style="padding: 12px 20px; border-color: var(--border-gold); color: var(--gold-soft);">
+          <a href="ai-copilot.php?id=<?= $book['id'] ?>" class="btn btn-outline" style="padding: 12px 20px; border-color: var(--border-gold); color: var(--gold-soft);">
             ✨ المساعد الذكي
           </a>
         </div>
@@ -228,9 +228,9 @@ if (!$book) {
         <span class="font-title" style="font-size: 1.2rem; font-weight: 700;">مكتبة بغداد</span>
       </div>
       <div class="font-ui" style="display: flex; gap: 20px; font-size: 0.85rem; color: var(--text-muted);">
-        <a href="../system/about-faq.html">عن المكتبة</a>
-        <a href="../system/about-faq.html">الأسئلة الشائعة</a>
-        <a href="../system/about-faq.html">اتصل بنا</a>
+        <a href="../system/about-faq.php">عن المكتبة</a>
+        <a href="../system/about-faq.php">الأسئلة الشائعة</a>
+        <a href="../system/about-faq.php">اتصل بنا</a>
       </div>
       <div class="font-ui" style="color: var(--text-muted); font-size: 0.85rem;">
         © 2026 مكتبة بغداد — بيت الحكمة الرقمي. جميع الحقوق محفوظة.
