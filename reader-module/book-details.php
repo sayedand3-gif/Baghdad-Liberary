@@ -3,7 +3,11 @@ require_once '../config/db.php';
 
 $book_id = isset($_GET['id']) ? (int)$_GET['id'] : 1;
 
-$stmt = $pdo->prepare("SELECT * FROM books WHERE id = ?");
+// جلب بيانات الكتاب مع اسم العالم في استعلام واحد متكامل
+$stmt = $pdo->prepare("SELECT books.*, COALESCE(books.author_name, scholars.name) AS author_display 
+                       FROM books 
+                       LEFT JOIN scholars ON books.author_id = scholars.id 
+                       WHERE books.id = ?");
 $stmt->execute([$book_id]);
 $book = $stmt->fetch();
 
@@ -11,6 +15,8 @@ if (!$book) {
     header('Location: ../discovery/library.php');
     exit;
 }
+
+$authorName = !empty($book['author_name']) ? $book['author_name'] : ($book['author_display'] ?? 'غير محدد');
 ?>
 
 <!DOCTYPE html>
@@ -125,6 +131,76 @@ if (!$book) {
       font-weight: 700;
       color: var(--gold-soft);
     }
+
+    /* ================= Premium Modal Styles ================= */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(10, 15, 29, 0.82);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .premium-card {
+      background: var(--surface-1);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-md);
+      width: 90%;
+      max-width: 440px;
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .modal-overlay.active .premium-card {
+      transform: scale(1);
+    }
+
+    .premium-badge {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-soft);
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .premium-price {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      color: var(--gold-soft);
+      margin: 14px 0 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .premium-price span {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-family: var(--font-ui);
+    }
   </style>
 </head>
 <body>
@@ -159,10 +235,13 @@ if (!$book) {
     
     <div class="book-hero illum-frame">
       
-      <div class="book-cover-lg" style="<?= !empty($book['cover_image']) ? "background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('" . htmlspecialchars($book['cover_image']) . "');" : "" ?>">
+      <?php 
+        $coverImg = !empty($book['cover_image']) ? ltrim($book['cover_image'], './') : '';
+      ?>
+      <div class="book-cover-lg" style="<?= !empty($coverImg) ? "background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('../" . htmlspecialchars($coverImg) . "');" : "" ?>">
         <span class="star8" style="width: 32px; height: 32px; margin-bottom: 12px;"></span>
         <h1 class="font-title"><?= htmlspecialchars($book['title']) ?></h1>
-        <p class="font-ui" style="color: var(--gold-soft);"><?= htmlspecialchars($book['author_name'] ?? '') ?> | <?= htmlspecialchars($book['category'] ?? '') ?></p>
+        <p class="font-ui" style="color: var(--gold-soft);"><?= htmlspecialchars($authorName) ?> | <?= htmlspecialchars($book['category'] ?? '') ?></p>
       </div>
 
       <div style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -171,11 +250,11 @@ if (!$book) {
             <div>
               <h2 style="font-size: 2rem; margin-bottom: 6px;"><?= htmlspecialchars($book['title']) ?></h2>
               <span class="font-ui" style="color: var(--gold-soft); font-size: 1.1rem;">
-                تأليف: <?= htmlspecialchars($book['author_name'] ?? 'غير محدد') ?>
+                تأليف: <?= htmlspecialchars($authorName) ?>
               </span>
             </div>
             <span class="font-ui" style="background: var(--surface-2); border: 1px solid var(--border-gold); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--gold-soft);">
-              ★ <?= htmlspecialchars($book['rating'] ?? '4.8') ?>
+              ★ <?= htmlspecialchars($book['rating'] ?? '4.85') ?>
             </span>
           </div>
 
@@ -186,7 +265,7 @@ if (!$book) {
             </div>
             <div>
               <div class="meta-item-label">عدد الصفحات</div>
-              <div class="meta-item-value"><?= htmlspecialchars($book['pages'] ?? $book['pages_count'] ?? 'غير محدد') ?> صفحة</div>
+              <div class="meta-item-value"><?= htmlspecialchars($book['pages_count'] ?? $book['pages'] ?? 'غير محدد') ?> صفحة</div>
             </div>
             <div>
               <div class="meta-item-label">سنة التأليف</div>
@@ -207,12 +286,16 @@ if (!$book) {
           <a href="interactive-reader.php?id=<?= $book['id'] ?>" class="btn btn-gold" style="padding: 12px 28px; font-size: 1rem;">
             📖 ابدأ القراءة الآن
           </a>
-          <a href="audiobook-player.php?id=<?= $book['id'] ?>" class="btn btn-outline" style="padding: 12px 24px; font-size: 1rem;">
+          
+          <!-- زر الكتاب الصوتي -->
+          <button type="button" class="btn btn-outline" onclick="showPremiumModal('الكتاب الصوتي')">
             🎧 استمع للكتاب الصوتي
-          </a>
-          <a href="ai-copilot.php?id=<?= $book['id'] ?>" class="btn btn-outline" style="padding: 12px 20px; border-color: var(--border-gold); color: var(--gold-soft);">
+          </button>
+
+          <!-- زر المساعد الذكي -->
+          <button type="button" class="btn btn-outline" onclick="showPremiumModal('المساعد الذكي')">
             ✨ المساعد الذكي
-          </a>
+          </button>
         </div>
 
       </div>
@@ -220,6 +303,31 @@ if (!$book) {
     </div>
 
   </main>
+
+  <!-- ================= Premium Feature Modal ================= -->
+  <div class="modal-overlay" id="premiumModal" onclick="closePremiumModal(event)">
+    <div class="premium-card illum-frame">
+      <span class="star8" style="width: 32px; height: 32px; margin: 0 auto 16px;"></span>
+      <div class="premium-badge">اشتراك متميز (Premium)</div>
+      <h3 style="font-size: 1.5rem; margin-bottom: 8px;">ميزة <span id="featureTitleName" style="color: var(--gold-soft);"></span></h3>
+      <p class="font-ui" style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+        هذه الميزة الفريدة متوفرة حصرياً لأعضاء العضوية الذهبية الفاخرة في بيت الحكمة الرقمي.
+      </p>
+
+      <div class="premium-price">
+        120$ <span>/ سنوياً</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 24px;">
+        <button type="button" class="btn btn-gold" style="padding: 12px; width: 100%;" onclick="alert('سيتم تحويلك لبوابة الدفع قريباً!')">
+          اشترك الآن وسجل الوصول
+        </button>
+        <button type="button" class="btn btn-outline" style="padding: 10px; width: 100%; border: none;" onclick="closePremiumModalDirect()">
+          إغلاق
+        </button>
+      </div>
+    </div>
+  </div>
 
   <footer style="background: var(--surface-1); border-top: 1px solid var(--border-gold); padding: 40px 24px 20px; margin-top: 60px;">
     <div style="max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
@@ -238,6 +346,25 @@ if (!$book) {
     </div>
   </footer>
 
+  <!-- ملف JS الأساسي -->
   <script src="../assets/js/main.js"></script>
+
+  <!-- كود تشغيل النوافذ المنبثقة -->
+  <script>
+    function showPremiumModal(featureName) {
+      document.getElementById('featureTitleName').innerText = featureName;
+      document.getElementById('premiumModal').classList.add('active');
+    }
+
+    function closePremiumModalDirect() {
+      document.getElementById('premiumModal').classList.remove('active');
+    }
+
+    function closePremiumModal(event) {
+      if (event.target === document.getElementById('premiumModal')) {
+        closePremiumModalDirect();
+      }
+    }
+  </script>
 </body>
 </html>
