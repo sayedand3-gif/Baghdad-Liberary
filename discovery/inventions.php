@@ -113,6 +113,13 @@ $inventions = $stmt->fetchAll();
       font-size: 0.75rem;
       color: var(--gold-soft);
     }
+ .invention-image img {
+    width: 100%;
+    height: 280px;
+    object-fit: contain;
+    background: #fff;
+    display: block;
+}
   </style>
 </head>
 <body>
@@ -160,12 +167,18 @@ $inventions = $stmt->fetchAll();
     <div class="invention-card illum-frame">
       <div class="invention-image">
         <?php if (!empty($invention['image_url'])): ?>
-          <img src="<?= htmlspecialchars($invention['image_url']) ?>" alt="<?= htmlspecialchars($invention['title']) ?>">
+         <img 
+    src="<?= htmlspecialchars($invention['image_url']) ?>"
+    alt="<?= htmlspecialchars($invention['title']) ?>"
+    class="invention-img"
+    onclick="openImage(this)"
+>
+          <!-- <img src="<?= htmlspecialchars($invention['image_url']) ?>" alt="<?= htmlspecialchars($invention['title']) ?>"> -->
         <?php endif; ?>
       </div>
       <h3><?= htmlspecialchars($invention['title']) ?></h3>
       <p><?= htmlspecialchars($invention['description']) ?></p>
-      <span class="inventor">المخترع: <?= htmlspecialchars($invention['inventor']) ?></span>
+      <!-- <span class="inventor">المخترع: <?= htmlspecialchars($invention['inventor']) ?></span> -->
     </div>
   <?php endforeach; ?>
 </div>
@@ -189,7 +202,10 @@ $inventions = $stmt->fetchAll();
       </div>
     </div>
   </footer>
-
+  <div id="imageModal" class="image-modal" onclick="closeImage()">
+    <span class="close-modal">&times;</span>
+    <img id="modalImage" class="modal-image" src="" alt="">
+</div>
   <script src="../assets/js/main.js"></script>
 </body>
 </html>
