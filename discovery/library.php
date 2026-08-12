@@ -6,21 +6,28 @@ require_once __DIR__ . '/../config/db.php';
 $search = trim($_GET['search'] ?? '');
 $category = trim($_GET['category'] ?? '');
 
-// Build query dynamically
-$query = "SELECT * FROM books WHERE 1=1";
+// Build query dynamically with JOIN to support author names from both tables
+$query = "SELECT books.*, COALESCE(books.author_name, scholars.name) AS author_display 
+          FROM books 
+          LEFT JOIN scholars ON books.author_id = scholars.id 
+          WHERE 1=1";
 $params = [];
 
+// Fix PDO issue: Use unique parameter keys for each search condition
 if (!empty($search)) {
-    $query .= " AND (title LIKE :search OR author_name LIKE :search)";
-    $params['search'] = '%' . $search . '%';
+    $query .= " AND (books.title LIKE :s1 OR books.author_name LIKE :s2 OR scholars.name LIKE :s3)";
+    $searchTerm = '%' . $search . '%';
+    $params['s1'] = $searchTerm;
+    $params['s2'] = $searchTerm;
+    $params['s3'] = $searchTerm;
 }
 
 if (!empty($category)) {
-    $query .= " AND category = :category";
+    $query .= " AND books.category = :category";
     $params['category'] = $category;
 }
 
-$query .= " ORDER BY id DESC";
+$query .= " ORDER BY books.id DESC";
 
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
@@ -112,12 +119,15 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 
     <!-- Search Form -->
-    <form action="" method="GET" class="search-box">
+    <form action="library.php" method="GET" class="search-box">
         <input type="text" name="search" class="search-input" placeholder="ابحث عن اسم كتاب أو مؤلف..." value="<?= htmlspecialchars($search) ?>" />
         <?php if (!empty($category)): ?>
             <input type="hidden" name="category" value="<?= htmlspecialchars($category) ?>">
         <?php endif; ?>
         <button type="submit" class="btn btn-gold" style="padding: 12px 24px;">بحث</button>
+        <?php if (!empty($search)): ?>
+            <a href="library.php<?= !empty($category) ? '?category=' . urlencode($category) : '' ?>" class="btn btn-outline" style="padding: 12px 16px; text-decoration: none; display: inline-flex; align-items: center;">إلغاء البحث</a>
+        <?php endif; ?>
     </form>
 
     <!-- Category Filter Tabs -->
@@ -135,13 +145,14 @@ require_once __DIR__ . '/../includes/header.php';
         <?php if (!empty($books)): ?>
             <?php foreach ($books as $book): 
                 $coverImage = !empty($book['cover_image']) ? ltrim($book['cover_image'], './') : '';
+                $authorName = !empty($book['author_name']) ? $book['author_name'] : ($book['author_display'] ?? '');
             ?>
                 <a href="../reader-module/book-details.php?id=<?= $book['id'] ?>" class="book-card illum-frame">
                     <div style="height: 240px; background: linear-gradient(135deg, #1e2740, #2c625d); display: flex; align-items: flex-end; padding: 16px; background-size: cover; background-position: center; <?= !empty($coverImage) ? "background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('../" . htmlspecialchars($coverImage) . "');" : "" ?>">
                         <span class="font-title" style="font-size: 1.2rem; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);"><?= htmlspecialchars($book['title']) ?></span>
                     </div>
                     <div style="padding: 14px">
-                        <div style="font-weight: 700; font-size: 0.95rem"><?= htmlspecialchars($book['author_name'] ?? '') ?></div>
+                        <div style="font-weight: 700; font-size: 0.95rem"><?= htmlspecialchars($authorName) ?></div>
                         <div class="font-ui" style="color: var(--gold-soft); font-size: 0.85rem; margin-top: 6px;">
                             ★ <?= htmlspecialchars($book['rating'] ?? '4.9') ?> (<?= htmlspecialchars($book['category'] ?? '') ?>)
                         </div>

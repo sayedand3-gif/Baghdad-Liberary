@@ -13,10 +13,10 @@ $country = $location['country'];
 $timings = PrayerService::getPrayerTimings($city, $country);
 
 // Fetch DB Statistics
+// Fetch DB Statistics
 $stmt = $pdo->query("SELECT COUNT(*) FROM books");
-$stmt2 = $pdo->query("SELECT books.*, scholars.name AS author_name
-FROM books
-JOIN scholars ON books.author_id = scholars.id");
+$stmt2 = $pdo->query("SELECT books.*, scholars.name AS author_name FROM books JOIN scholars ON books.author_id = scholars.id ORDER BY books.id DESC LIMIT 4");
+
 $booksCount = $fmt->format($stmt->fetchColumn());
 $books = $stmt2->fetchAll();
 
