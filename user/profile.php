@@ -91,8 +91,8 @@ require_once __DIR__ . '/../includes/header.php';
                     </p>
                 </div>
                 <a href="edit-profile.php" class="btn btn-outline" style="font-size: 0.85rem; padding: 8px 18px">
-    تعديل الملف الشخصي
-</a>
+                     تعديل الملف الشخصي
+                </a>
             </div>
         </div>
     </div>

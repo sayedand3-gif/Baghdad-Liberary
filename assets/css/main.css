@@ -2,40 +2,37 @@
    مكتبة بغداد — Design System & Global Styles
    ========================================================= */
 
-/* 1. استدعاء الخطوط العربية من Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap');
+/* 1. Import Arabic Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap");
 
-/* 2. المتغيرات العامة (Variables - Dark Mode كوضعي أساسي) */
+/* 2. Global CSS Variables (Dark Mode Default) */
 :root {
-  /* Colors - Palette */
-  --bg-primary: #0D1220;
-  --surface-1: #161D30;
-  --surface-2: #1E2740;
-  --surface-3: #242E4A;
-  
-  --gold-primary: #C9A227;
-  --gold-soft: #E4C665;
-  --gold-hover: #D8AF33;
-  
-  --teal-primary: #4A8C85;
-  --teal-soft: #6BAFA8;
-  
-  --text-main: #F1EBDA;
-  --text-muted: #98A0BC;
-  --text-dark: #1A1406;
-  
+  /* Color Palette */
+  --bg-primary: #0d1220;
+  --surface-1: #161d30;
+  --surface-2: #1e2740;
+  --surface-3: #242e4a;
+  --gold-primary: #c9a227;
+  --gold-soft: #e4c665;
+  --gold-hover: #d8af33;
+  --teal-primary: #4a8c85;
+  --teal-soft: #6bafa8;
+  --text-main: #f1ebda;
+  --text-muted: #98a0bc;
+  --text-dark: #1a1406;
+
   /* Borders & Shadows */
   --border-gold: rgba(201, 162, 39, 0.22);
   --border-subtle: rgba(255, 255, 255, 0.08);
   --shadow-main: 0 20px 60px rgba(0, 0, 0, 0.45);
   --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.3);
 
-  /* Fonts */
-  --font-title: 'Aref Ruqaa', serif;
-  --font-body: 'Cairo', sans-serif;
-  --font-ui: 'Tajawal', sans-serif;
-  
-  /* Transitions & Radii */
+  /* Typography */
+  --font-title: "Aref Ruqaa", serif;
+  --font-body: "Cairo", sans-serif;
+  --font-ui: "Tajawal", sans-serif;
+
+  /* Radii & Transitions */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
@@ -43,32 +40,30 @@
   --transition-smooth: 0.4s ease;
 }
 
-/* 3. المتغيرات للوضع النهاري (Light Mode) */
+/* 3. Light Mode Theme Overrides */
 html.light {
-  --bg-primary: #F6F0DE;
-  --surface-1: #FFFDF6;
-  --surface-2: #EFE6CC;
-  --surface-3: #E6DAB4;
-  
-  --gold-primary: #9C6F16;
-  --gold-soft: #B8860B;
-  --gold-hover: #825A0F;
-  
-  --teal-primary: #2C625D;
-  --teal-soft: #1F4A46;
-  
-  --text-main: #211B0F;
-  --text-muted: #5C5640;
-  --text-dark: #FFF9EA;
-  
+  --bg-primary: #f6f0de;
+  --surface-1: #fffdf6;
+  --surface-2: #efe6cc;
+  --surface-3: #e6dab4;
+  --gold-primary: #9c6f16;
+  --gold-soft: #b8860b;
+  --gold-hover: #825a0f;
+  --teal-primary: #2c625d;
+  --teal-soft: #1f4a46;
+  --text-main: #211b0f;
+  --text-muted: #5c5640;
+  --text-dark: #fff9ea;
   --border-gold: rgba(156, 111, 22, 0.28);
   --border-subtle: rgba(0, 0, 0, 0.08);
   --shadow-main: 0 20px 50px rgba(90, 70, 20, 0.12);
   --shadow-card: 0 10px 24px rgba(90, 70, 20, 0.18);
 }
 
-/* 4. إعادات الضبط العامة (CSS Reset) */
-*, *::before, *::after {
+/* 4. General CSS Reset */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -77,6 +72,9 @@ html.light {
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  /* Firefox Scrollbar Styling */
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-primary) var(--bg-primary);
 }
 
 body {
@@ -86,11 +84,16 @@ body {
   line-height: 1.6;
   direction: rtl;
   overflow-x: hidden;
-  transition: background-color var(--transition-smooth), color var(--transition-smooth);
+  transition:
+    background-color var(--transition-smooth),
+    color var(--transition-smooth);
 }
 
-/* 5. العناوين والنصوص */
-h1, h2, h3, .font-title {
+/* 5. Typography Defaults */
+h1,
+h2,
+h3,
+.font-title {
   font-family: var(--font-title);
   font-weight: 700;
 }
@@ -105,7 +108,7 @@ a {
   transition: color var(--transition-fast);
 }
 
-/* 6. المكونات المشتركة (Buttons & Badges) */
+/* 6. UI Components (Buttons & Badges) */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -117,7 +120,10 @@ a {
   border-radius: var(--radius-sm);
   cursor: pointer;
   border: none;
-  transition: transform var(--transition-fast), filter var(--transition-fast), background-color var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    filter var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .btn:hover {
@@ -143,26 +149,44 @@ a {
   background-color: rgba(201, 162, 39, 0.12);
 }
 
-/* 7. زخرفة النجمة الثمانية (Rub El Hizb Motif) */
+/* 7. Islamic 8-Pointed Star Motif (Rub El Hizb) */
 .star8 {
   display: inline-block;
   width: 1em;
   height: 1em;
   background: var(--gold-primary);
   clip-path: polygon(
-    50% 0%, 61% 15%, 79% 6%, 80% 26%, 100% 30%, 89% 47%, 100% 64%,
-    82% 71%, 82% 91%, 63% 84%, 50% 100%, 37% 84%, 18% 91%, 18% 71%,
-    0% 64%, 11% 47%, 0% 30%, 20% 26%, 21% 6%, 39% 15%
+    50% 0%,
+    61% 15%,
+    79% 6%,
+    80% 26%,
+    100% 30%,
+    89% 47%,
+    100% 64%,
+    82% 71%,
+    82% 91%,
+    63% 84%,
+    50% 100%,
+    37% 84%,
+    18% 91%,
+    18% 71%,
+    0% 64%,
+    11% 47%,
+    0% 30%,
+    20% 26%,
+    21% 6%,
+    39% 15%
   );
 }
 
-/* 8. إطار الإضاءة الإسلامي لكروت الهيرو والتمييز */
+/* 8. Illuminated Framing Border Effect */
 .illum-frame {
   position: relative;
 }
 
-.illum-frame::before, .illum-frame::after {
-  content: '';
+.illum-frame::before,
+.illum-frame::after {
+  content: "";
   position: absolute;
   width: 20px;
   height: 20px;
@@ -184,37 +208,68 @@ a {
   border-right: none;
   border-top: none;
 }
+
+/* 9. Image Modal Components */
 .image-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 99999;
-    justify-content: center;
-    align-items: center;
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 99999;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-image {
-    max-width: 80%;
-    max-height: 80%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 10px;
+  max-width: 80%;
+  max-height: 80%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
 }
 
 .close-modal {
-    position: fixed;
-    top: 25px;
-    right: 35px;
-    color: white;
-    font-size: 45px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 100000;
+  position: fixed;
+  top: 25px;
+  right: 35px;
+  color: #ffffff;
+  font-size: 45px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 100000;
 }
+
 .invention-img {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+/* =========================================================
+   10. Custom Scrollbar Styling (Webkit & Firefox)
+   ========================================================= */
+
+/* Custom Scrollbar Width & Height */
+::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+/* Scrollbar Track Background */
+::-webkit-scrollbar-track {
+  background: var(--bg-primary) !important;
+}
+
+/* Scrollbar Movable Thumb */
+::-webkit-scrollbar-thumb {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--gold-primary) !important;
+  border-radius: 6px !important;
+  transition: background var(--transition-fast);
+}
+
+/* Scrollbar Thumb Hover State */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-primary) !important;
 }

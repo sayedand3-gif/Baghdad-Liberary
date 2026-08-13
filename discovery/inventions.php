@@ -3,7 +3,12 @@
 require_once __DIR__ . '/../config/db.php';
 
 // Fetch inventions list from database
-$stmt = $pdo->query("SELECT * FROM inventions ORDER BY id ASC");
+$stmt = $pdo->query("SELECT 
+    inventions.*, 
+    scholars.name AS inventor_name 
+FROM inventions 
+JOIN scholars ON inventions.inventor_id = scholars.id 
+ORDER BY inventions.id ASC;");
 $inventions = $stmt->fetchAll();
 
 // Dynamic page title configuration
@@ -83,7 +88,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <?= htmlspecialchars($invention['description'] ?? '') ?>
                 </p>
                 <div class="inventor-tag font-ui">
-                    المخترع: <?= htmlspecialchars($invention['inventor'] ?? 'غير محدد') ?>
+                    المخترع: <?= htmlspecialchars($invention['inventor_name'] ?? 'غير محدد') ?>
                 </div>
             </div>
         <?php endforeach; ?>

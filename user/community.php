@@ -1,8 +1,13 @@
 <?php
 
-// Include database connection
+session_start();
 require_once __DIR__ . '/../config/db.php';
 
+// Ensure user is authenticated
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../auth/login.php');
+    exit;
+}
 // Set page title
 $pageTitle = "مجالس الفكر والمجتمع — مكتبة بغداد";
 

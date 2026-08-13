@@ -24,7 +24,6 @@ function initThemeToggle() {
     if (toggleThumb) toggleThumb.textContent = "☾";
   }
 
-  // إذا لم يكن الزر موجوداً في الصفحة حالياً، نتوقف هنا
   if (!toggleBtn) return;
 
   toggleBtn.addEventListener("click", () => {
